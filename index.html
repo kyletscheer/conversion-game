@@ -9,10 +9,9 @@
   </head>
   <body class="bg-gradient-to-br from-purple-50 to-blue-50 min-h-screen">
     <div id="app" class="container mx-auto px-4 py-6 max-w-6xl">
-      <!-- Header -->
-      <header class="text-center mb-8 animate-slide-in">
+      <header class="text-center mb-6 animate-slide-in">
         <h1
-          class="text-5xl font-bold gradient-bg bg-clip-text text-transparent mb-2"
+          class="text-4xl md:text-5xl font-bold gradient-bg bg-clip-text text-transparent mb-1"
         >
           ConvertQuest
         </h1>
@@ -21,48 +20,39 @@
         </p>
       </header>
 
-      <!-- Main Content -->
       <div id="welcome-screen" class="animate-slide-in">
-        <!-- Mode Selection -->
-        <div class="bg-white rounded-3xl shadow-xl p-8 mb-6">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
-            Choose Your Mode
-          </h2>
-          <div class="grid md:grid-cols-2 gap-6">
-            <button
-              onclick="selectMode('timed')"
-              class="card-hover bg-gradient-to-br from-purple-500 to-indigo-600 text-white rounded-2xl p-8 text-left"
-            >
-              <div class="text-4xl mb-3">⏱️</div>
-              <h3 class="text-2xl font-bold mb-2">Timed Challenge</h3>
-              <p class="text-purple-100">
-                Race against the clock and test your speed
-              </p>
-            </button>
-            <button
-              onclick="selectMode('practice')"
-              class="card-hover bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-2xl p-8 text-left"
-            >
-              <div class="text-4xl mb-3">📚</div>
-              <h3 class="text-2xl font-bold mb-2">Practice Mode</h3>
-              <p class="text-emerald-100">Learn at your own pace, no timer</p>
-            </button>
-          </div>
-          <div class="mt-6 pt-6 border-t border-gray-100">
-            <button
-              onclick="showHistory()"
-              class="w-full bg-gray-100 text-gray-700 py-3 rounded-xl font-bold hover:bg-gray-200 transition-all"
-            >
-              View History & Stats 📈
-            </button>
-          </div>
-        </div>
+        <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8">
+          <div
+            class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 border-b border-gray-100 pb-4"
+          >
+            <h2 class="text-2xl font-bold text-gray-800">Select Conversions</h2>
 
-        <!-- Category Selection -->
-        <div class="bg-white rounded-3xl shadow-xl p-8">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6">
-            Select Categories
-          </h2>
+            <div
+              class="bg-gray-100 p-1 rounded-lg flex items-center shadow-inner"
+            >
+              <span
+                class="text-xs font-bold text-gray-400 uppercase tracking-wider mr-2 ml-2"
+                >Mode:</span
+              >
+              <div id="mode-toggle-group" class="flex gap-1">
+                <button
+                  id="mode-timed-btn"
+                  onclick="selectMode('timed')"
+                  class="flex-1 py-1.5 px-3 rounded-md text-gray-500 text-xs font-medium hover:bg-gray-50 transition-colors"
+                >
+                  ⏱️<br />Timed
+                </button>
+                <button
+                  id="mode-practice-btn"
+                  onclick="selectMode('practice')"
+                  class="flex-1 py-1.5 px-3 rounded-md bg-white text-indigo-600 text-xs font-bold shadow-sm ring-1 ring-gray-200"
+                >
+                  📚<br />Practice
+                </button>
+              </div>
+            </div>
+          </div>
+
           <div
             id="category-container"
             class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6"
@@ -70,20 +60,22 @@
 
           <div id="conversion-selection" class="hidden">
             <h3 class="text-xl font-semibold text-gray-700 mb-4">
-              Choose Conversions
+              Choose Conversion Types
             </h3>
             <div
               id="conversion-list"
-              class="grid md:grid-cols-2 gap-3 mb-6"
+              class="grid md:grid-cols-3 gap-3 mb-6"
             ></div>
           </div>
 
-          <div
-            id="selected-count"
-            class="text-center text-gray-600 mb-4 hidden"
-          >
-            <span class="font-semibold text-purple-600">0</span> conversions
-            selected
+          <div id="selected-conversions-view" class="mb-6">
+            <div class="text-center text-gray-600 mb-3">
+              <div id="selected-count" class="text-lg font-bold">
+                <span id="conversion-count-text" class="text-gray-600">0</span>
+                Conversions Selected
+              </div>
+            </div>
+            <div id="selected-conversions-list"></div>
           </div>
 
           <div id="timer-setup" class="hidden mb-6">
@@ -104,17 +96,15 @@
           <button
             id="start-btn"
             onclick="startGame()"
-            class="hidden w-full md:w-auto md:mx-auto md:block bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-12 py-4 rounded-full font-bold text-lg hover:shadow-xl transition-all transform hover:scale-105"
+            class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-12 py-4 rounded-full font-bold text-lg hover:shadow-xl transition-all transform hover:scale-105"
           >
             Start Game 🚀
           </button>
         </div>
       </div>
 
-      <!-- Game Screen -->
       <div id="game-screen" class="hidden">
         <div class="grid md:grid-cols-3 gap-6 mb-6">
-          <!-- Stats Cards -->
           <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
             <div class="text-gray-600 text-sm mb-1">Questions</div>
             <div id="question-count" class="text-4xl font-bold text-purple-600">
@@ -127,6 +117,13 @@
           >
             <div class="text-orange-100 text-sm mb-1">Time Remaining</div>
             <div id="timer-display" class="text-4xl font-bold">60</div>
+            <div class="timer-bar-bg">
+              <div
+                id="timer-bar"
+                class="timer-bar-fill"
+                style="width: 100%"
+              ></div>
+            </div>
           </div>
           <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
             <div class="text-gray-600 text-sm mb-1">Avg Accuracy</div>
@@ -136,9 +133,10 @@
           </div>
         </div>
 
-        <!-- Question Card -->
-        <div class="bg-white rounded-3xl shadow-xl p-8 mb-6 animate-fade-in">
-          <div class="mb-6">
+        <div
+          class="bg-white rounded-3xl shadow-xl p-8 mb-6 animate-fade-in relative"
+        >
+          <div class="mb-6 text-center">
             <div class="text-sm text-gray-500 mb-2">Convert:</div>
             <h2
               id="question-text"
@@ -147,45 +145,33 @@
               Ready to start?
             </h2>
           </div>
+
+          <div class="mb-6 flex justify-center">
+            <button
+              onclick="toggleFormula()"
+              id="formula-toggle-btn"
+              class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors border border-indigo-200 py-1 px-3 rounded-full"
+            >
+              Show Formula
+            </button>
+          </div>
           <div
-            id="feedback-banner"
-            class="p-4 rounded-xl mb-4 text-center font-bold text-lg hidden animate-fade-in"
-          ></div>
-
-          <!-- Formula/Hint Box -->
-          <div class="bg-white rounded-3xl shadow-xl p-8 mb-6 animate-fade-in">
-            <div id="formula-hint" class="formula-box p-4 rounded-xl mb-6">
-              <div class="flex justify-between items-center mb-1">
-                <div class="text-sm font-semibold text-purple-700">
-                  💡 Hint:
-                </div>
-                <button
-                  onclick="toggleFormula()"
-                  id="formula-toggle-btn"
-                  class="text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
-                >
-                  Show Formula
-                </button>
-              </div>
-              <div id="formula-text-container" class="hidden">
-                <div
-                  id="formula-text"
-                  class="text-gray-700 font-mono mt-1"
-                ></div>
-              </div>
-            </div>
+            id="formula-text-container"
+            class="hidden formula-box p-4 rounded-xl mb-6"
+          >
+            <div id="formula-text" class="text-gray-700 font-mono mt-1"></div>
           </div>
 
-          <div class="mb-6">
-            <input
-              type="number"
-              id="answer-input"
-              placeholder="Enter your answer"
-              step="any"
-              class="w-full px-6 py-4 text-2xl border-2 border-gray-300 rounded-xl focus:border-purple-500 focus:outline-none text-center font-semibold"
-              onkeypress="if(event.key==='Enter') submitAnswer()"
-            />
-          </div>
+          <input
+            type="text"
+            id="answer-input"
+            placeholder="Enter your answer"
+            inputmode="decimal"
+            autocomplete="off"
+            class="w-full px-6 py-4 text-2xl border-2 border-gray-300 rounded-xl focus:border-purple-500 focus:outline-none text-center font-semibold mb-6"
+            oninput="filterNumberInput(this)"
+            onkeypress="if(event.key === 'Enter') submitAnswer()"
+          />
 
           <div class="flex gap-4">
             <button
@@ -201,10 +187,25 @@
               Stop
             </button>
           </div>
+          <br /><br />
+          <div
+            id="feedback-banner"
+            class="p-4 rounded-xl mb-4 text-center font-bold text-lg hidden animate-fade-in"
+          ></div>
+          <br />
+          <div class="text-center">
+            <button
+              onclick="toggleFeedbackDisplay()"
+              id="feedback-toggle-btn"
+              class="flex items-center gap-1.5 text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-full text-xs font-bold hover:bg-indigo-100 transition-colors"
+            >
+              <span>👁️</span>
+              <span class="hidden md:inline">Hide Previous Answer</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      <!-- Results Screen -->
       <div id="results-screen" class="hidden">
         <div class="bg-white rounded-3xl shadow-xl p-8 mb-6 text-center">
           <div class="text-6xl mb-4">🎉</div>
@@ -248,7 +249,6 @@
           </button>
         </div>
 
-        <!-- Accuracy Legend -->
         <div class="bg-white rounded-2xl shadow-lg p-6">
           <h3 class="font-bold text-gray-800 mb-4">Accuracy Tiers</h3>
           <div class="space-y-2">
@@ -323,6 +323,13 @@
             </div>
           </div>
 
+          <div id="global-stats-section" class="mb-8 hidden">
+            <h3 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">
+              Your Performance by Type (All Games)
+            </h3>
+            <div id="hist-global-stats-container"></div>
+          </div>
+
           <h3 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">
             Recent Game Logs
           </h3>
@@ -332,20 +339,81 @@
 
           <div id="history-log-container" class="space-y-4"></div>
 
+          <div class="flex justify-end gap-4">
+            <button
+              onclick="resetHistory()"
+              class="mt-8 bg-red-100 text-red-700 px-6 py-3 rounded-xl font-bold hover:bg-red-200 transition-all"
+            >
+              Clear All History 🗑️
+            </button>
+            <button
+              onclick="hideHistory()"
+              class="mt-8 bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-bold hover:bg-gray-300 transition-all"
+            >
+              Back to Setup
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="history-detail-screen" class="hidden">
+        <div class="bg-white rounded-3xl shadow-xl p-8 mb-6">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4 border-b pb-2">
+            Game Details
+          </h2>
+
+          <div class="grid md:grid-cols-4 gap-4 text-center mb-6">
+            <div class="bg-purple-50 rounded-xl p-3">
+              <div class="text-xs text-gray-600 mb-0.5">Date</div>
+              <div id="detail-date" class="text-sm font-bold text-purple-700">
+                --
+              </div>
+            </div>
+            <div class="bg-blue-50 rounded-xl p-3">
+              <div class="text-xs text-gray-600 mb-0.5">Mode</div>
+              <div id="detail-mode" class="text-sm font-bold text-blue-700">
+                --
+              </div>
+            </div>
+            <div class="bg-emerald-50 rounded-xl p-3">
+              <div class="text-xs text-gray-600 mb-0.5">Questions</div>
+              <div
+                id="detail-final-count"
+                class="text-2xl font-bold text-emerald-600"
+              >
+                0
+              </div>
+            </div>
+            <div class="bg-yellow-50 rounded-xl p-3">
+              <div class="text-xs text-gray-600 mb-0.5">Accuracy</div>
+              <div
+                id="detail-final-accuracy"
+                class="text-2xl font-bold text-yellow-600"
+              >
+                0%
+              </div>
+            </div>
+          </div>
+
+          <h3 class="text-xl font-bold text-gray-800 mb-3 border-b pb-1">
+            Conversion Breakdown
+          </h3>
+          <div id="detail-summary-container" class="mb-6"></div>
+
+          <h3 class="text-xl font-bold text-gray-800 mb-3 border-b pb-1">
+            Question Log
+          </h3>
+          <div id="detail-table-container" class="mb-6"></div>
+
           <button
-            onclick="resetHistory()"
-            class="mt-8 bg-red-100 text-red-700 px-6 py-3 rounded-xl font-bold hover:bg-red-200 transition-all"
+            onclick="hideHistoryDetails()"
+            class="bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-bold hover:bg-gray-300 transition-all"
           >
-            Clear All History 🗑️
-          </button>
-          <button
-            onclick="hideHistory()"
-            class="mt-8 ml-4 bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-bold hover:bg-gray-300 transition-all"
-          >
-            Back to Setup
+            ← Back to History
           </button>
         </div>
       </div>
+
       <div
         id="about-modal"
         class="fixed inset-0 z-50 hidden modal-overlay items-center justify-center p-4"
@@ -354,12 +422,9 @@
         <div
           class="bg-white rounded-3xl shadow-2xl w-full sm:max-w-4xl max-h-[95vh] flex flex-col animate-fade-in"
         >
-          <!-- Modal Header -->
           <div class="p-6 border-b">
             <div class="flex justify-between items-center">
-              <h3 class="text-3xl font-bold text-gray-800">
-                About ConvertQuest & Formulas
-              </h3>
+              <h3 class="text-3xl font-bold text-gray-800">About & Formulas</h3>
               <button
                 onclick="closeAboutModal()"
                 class="text-gray-500 hover:text-gray-700 text-2xl font-semibold p-2 rounded-full hover:bg-gray-100 transition-colors"
@@ -368,32 +433,21 @@
               </button>
             </div>
           </div>
-
-          <!-- Modal Content (Scrollable) -->
           <div class="p-6 formula-list-container">
             <div class="mb-6">
               <p class="text-gray-700 mb-4">
                 <strong>ConvertQuest</strong> is a training tool designed to
                 sharpen your mental math and build an intuitive grasp of common
-                unit conversions. Practice helps you gain speed and accuracy,
-                preparing you for anything from complex science problems to
-                everyday tasks like cooking or travel.
+                unit conversions.
               </p>
             </div>
-
-            <!-- Formulas Section -->
             <h4
               class="text-2xl font-bold formula-category-title mb-4 border-b pb-2"
             >
               Conversion Formulas Reference
             </h4>
-
-            <div id="formula-content" class="space-y-6">
-              <!-- Formulas will be injected here by JS after conversion object is processed -->
-            </div>
+            <div id="formula-content" class="space-y-6"></div>
           </div>
-
-          <!-- Modal Footer -->
           <div class="p-4 border-t text-right">
             <button
               onclick="closeAboutModal()"
@@ -406,26 +460,35 @@
       </div>
     </div>
 
-    <!-- Footer -->
     <footer
       class="text-center py-8 mt-12"
       style="color: var(--text-secondary); font-size: 0.875rem"
     >
-      <button
-        onclick="openAboutModal()"
-        class="w-full bg-gray-100 text-gray-700 py-3 rounded-xl font-bold hover:bg-gray-200 transition-all"
-      >
-        About & Formulas ℹ️
-      </button>
-      <button
-        class="w-full bg-blue-100 text-gray-700 py-3 rounded-xl font-bold hover:bg-gray-200 transition-all"
-      >
-        <a href="https://www.kylescheer.com/travel-cents" target="_blank"
-          >TravelCents - Currency Conversion Game 💱</a
+      <div class="max-w-md mx-auto px-4 space-y-2">
+        <button
+          onclick="showHistory()"
+          class="w-full bg-gray-100 text-gray-700 py-3 rounded-xl font-bold hover:bg-gray-200 transition-all"
         >
-      </button>
-      <p class="mb-2">Data saved locally in your browser</p>
-      <p class="mb-2">
+          View History & Stats 📈
+        </button>
+        <button
+          onclick="openAboutModal()"
+          class="w-full bg-gray-100 text-gray-700 py-3 rounded-xl font-bold hover:bg-gray-200 transition-all"
+        >
+          About & Formulas ℹ️
+        </button>
+        <button
+          class="w-full bg-blue-100 text-gray-700 py-3 rounded-xl font-bold hover:bg-gray-200 transition-all"
+        >
+          <a href="https://www.kylescheer.com/travel-cents" target="_blank"
+            >TravelCents - Currency Conversion Game 💱</a
+          >
+        </button>
+      </div>
+      <p class="mt-3 mb-2 text-xs text-gray-500">
+        Data saved locally in your browser
+      </p>
+      <p class="mb-2 text-xs text-gray-500">
         Made by
         <a
           href="https://kylescheer.com"
@@ -434,7 +497,7 @@
           >Kyle Scheer</a
         >
       </p>
-      <p class="mb-3">
+      <p class="mb-3 text-xs text-gray-500">
         <a
           href="https://www.github.com/kyletscheer/conversion-game"
           target="_blank"
@@ -457,6 +520,7 @@
         />
       </a>
     </footer>
+    <script src="conversions.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
