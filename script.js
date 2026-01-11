@@ -104,19 +104,20 @@ function renderCategories() {
     const btn = document.createElement("button");
     btn.className = `category-chip bg-${cat.color}-100 hover:bg-${cat.color}-200 px-4 py-3 rounded-xl font-semibold text-${cat.color}-700 border-2 border-transparent transition-all`;
     btn.innerHTML = `${cat.emoji} ${cat.name}`;
+    btn.dataset.key = key;
     btn.onclick = () => toggleCategory(key, btn);
     container.appendChild(btn);
   });
   
-  if(gameState.selectedConversions.length > 0) {
+    if (gameState.selectedConversions.length > 0) {
       const [catKey] = gameState.selectedConversions[0].split('.');
-      const initialCatButton = container.querySelector(`[onclick*="toggleCategory('${catKey}'"]`);
+      const initialCatButton = container.querySelector(`[data-key="${catKey}"]`);
       if(initialCatButton) {
-          initialCatButton.classList.add("border-purple-500");
-          renderConversionList(catKey);
-          document.getElementById("conversion-selection").classList.remove("hidden");
+        initialCatButton.classList.add("border-purple-500");
+        renderConversionList(catKey);
+        document.getElementById("conversion-selection").classList.remove("hidden");
       }
-  }
+    }
 }
 
 function toggleCategory(categoryKey, btn) {
@@ -210,22 +211,44 @@ function renderSelectedConversionsSummary() {
     container.innerHTML = `<p class="text-sm text-gray-500 italic text-center py-2">Select conversion types above to begin.</p>`;
     return;
   }
+  // Build clickable tags so users can remove selections by clicking them
+  container.innerHTML = "";
+  const wrapper = document.createElement("div");
+  wrapper.className = "flex flex-wrap gap-2 justify-center p-3 border border-gray-200 bg-gray-50 rounded-lg max-h-40 overflow-y-auto";
 
-  const names = gameState.selectedConversions.map((fullKey) => {
+  gameState.selectedConversions.forEach((fullKey) => {
     const [catKey, convKey] = fullKey.split(".");
-    if (conversions[catKey] && conversions[catKey].conversions[convKey]) {
-      return conversions[catKey].conversions[convKey].name;
-    }
-    return "Unknown";
+    const name = (conversions[catKey] && conversions[catKey].conversions[convKey]) ? conversions[catKey].conversions[convKey].name : "Unknown";
+
+    const span = document.createElement("span");
+    span.className = "bg-indigo-100 text-indigo-800 text-xs font-medium px-2 py-1 rounded-full cursor-pointer hover:opacity-90";
+    span.textContent = name;
+    span.title = "Click to remove";
+    span.dataset.fullKey = fullKey;
+    span.addEventListener("click", () => removeSelectedConversion(fullKey));
+
+    wrapper.appendChild(span);
   });
 
-  let html = `<div class="flex flex-wrap gap-2 justify-center p-3 border border-gray-200 bg-gray-50 rounded-lg max-h-40 overflow-y-auto">`;
-  names.forEach((name) => {
-    html += `<span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2 py-1 rounded-full">${name}</span>`;
-  });
-  html += `</div>`;
+  container.appendChild(wrapper);
+}
 
-  container.innerHTML = html;
+// Remove a selected conversion by its fullKey and refresh UI
+function removeSelectedConversion(fullKey) {
+  const idx = gameState.selectedConversions.indexOf(fullKey);
+  if (idx === -1) return;
+  gameState.selectedConversions.splice(idx, 1);
+  saveSelectedConversions();
+  updateSelectedCount();
+
+  // If conversion list is visible and the currently open category matches,
+  // re-render that category's list so item highlights update.
+  const activeCatBtn = document.querySelector('.category-chip.border-purple-500');
+  if (activeCatBtn && activeCatBtn.dataset && activeCatBtn.dataset.key) {
+    const activeKey = activeCatBtn.dataset.key;
+    const removedCat = fullKey.split('.')[0];
+    if (activeKey === removedCat) renderConversionList(activeKey);
+  }
 }
 
 function updateSelectedCount() {
