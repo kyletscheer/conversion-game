@@ -474,7 +474,6 @@ function resetGame() {
 
   document.getElementById("results-screen").classList.add("hidden");
   document.getElementById("welcome-screen").classList.remove("hidden");
-  document.getElementById("timer-card").classList.add("hidden");
   renderCategories();
   updateSelectedCount();
 }
