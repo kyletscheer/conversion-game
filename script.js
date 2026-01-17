@@ -197,18 +197,38 @@ function filterNumberInput(input) {
   // Remove invalid characters
   value = value.replace(/[^0-9.\-]/g, "");
 
-  // Keep only first minus, and only if it's at the start
-  const hasMinus = value.startsWith("-");
-  value = value.replace(/-/g, "");
-  if (hasMinus) value = "-" + value;
+  // Handle minus: keep only one and only at start
+  if (value.includes("-")) {
+    value = value.replace(/-/g, "");
+    value = "-" + value;
+  }
 
-  // Keep only first decimal point
-  const parts = value.split(".");
-  if (parts.length > 2) {
-    value = parts[0] + "." + parts.slice(1).join("");
+  // Handle decimal: keep only first dot
+  const firstDot = value.indexOf(".");
+  if (firstDot !== -1) {
+    const before = value.slice(0, firstDot + 1);
+    const after = value.slice(firstDot + 1).replace(/\./g, "");
+    value = before + after;
   }
 
   input.value = value;
+}
+
+function toggleSign() {
+  const input = document.getElementById("answer-input");
+  let value = input.value;
+
+  if (value.startsWith("-")) {
+    value = value.slice(1);
+  } else if (value.length > 0) {
+    value = "-" + value;
+  } else {
+    // If empty, start with "-"
+    value = "-";
+  }
+
+  input.value = value;
+  input.focus();
 }
 
 function renderSelectedConversionsSummary() {
