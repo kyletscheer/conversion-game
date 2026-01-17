@@ -192,10 +192,22 @@ document.getElementById("timer-input").addEventListener("keydown", function (e) 
 });
 
 function filterNumberInput(input) {
-  let value = input.value.replace(/[^0-9.-]/g, "");
+  let value = input.value;
+
+  // Remove invalid characters
+  value = value.replace(/[^0-9.\-]/g, "");
+
+  // Keep only first minus, and only if it's at the start
+  const hasMinus = value.startsWith("-");
+  value = value.replace(/-/g, "");
+  if (hasMinus) value = "-" + value;
+
+  // Keep only first decimal point
   const parts = value.split(".");
-  if (parts.length > 2) value = parts[0] + "." + parts.slice(1).join("");
-  if (value.includes("-")) value = "-" + value.replace(/-/g, "");
+  if (parts.length > 2) {
+    value = parts[0] + "." + parts.slice(1).join("");
+  }
+
   input.value = value;
 }
 
