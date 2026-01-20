@@ -43,37 +43,49 @@ const conversions = {
       },
     },
   },
-  temperature: {
-    name: "Temperature",
-    emoji: "🌡️",
-    color: "red",
-    conversions: {
-      cToF: {
-        name: "Celsius → Fahrenheit",
-        formula: "°F = (°C × 9/5) + 32",
-        special: "cToF",
-        range: [-50, 50],
-      },
-      fToC: {
-        name: "Fahrenheit → Celsius",
-        formula: "°C = (°F - 32) × 5/9",
-        special: "fToC",
-        range: [-30, 150],
-      },
-      cToK: {
-        name: "Celsius → Kelvin",
-        formula: "K = °C + 273.15",
-        special: "cToK",
-        range: [-50, 50],
-      },
-      kToC: {
-        name: "Kelvin → Celsius",
-        formula: "°C = K - 273.15",
-        special: "kToC",
-        range: [1, 400],
-      },
+temperature: {
+  name: "Temperature",
+  emoji: "🌡️",
+  color: "red",
+  conversions: {
+    cToF: {
+      name: "Celsius → Fahrenheit",
+      formula: "°F = (°C × 9/5) + 32",
+      special: "cToF",
+      range: [-40, 50],
+    },
+    fToC: {
+      name: "Fahrenheit → Celsius",
+      formula: "°C = (°F - 32) × 5/9",
+      special: "fToC",
+      range: [-40, 122],
+    },
+    cToK: {
+      name: "Celsius → Kelvin",
+      formula: "K = °C + 273.15",
+      special: "cToK",
+      range: [-40, 50],
+    },
+    kToC: {
+      name: "Kelvin → Celsius",
+      formula: "°C = K - 273.15",
+      special: "kToC",
+      range: [233, 323],
+    },
+    kToF: {
+      name: "Kelvin → Fahrenheit",
+      formula: "°F = (K - 273.15) × 9/5 + 32",
+      special: "kToF",
+      range: [233, 323],
+    },
+    fToK: {
+      name: "Fahrenheit → Kelvin",
+      formula: "K = (°F - 32) × 5/9 + 273.15",
+      special: "fToK",
+      range: [-40, 122],
     },
   },
+},
   mass: {
     name: "Mass",
     emoji: "⚖️",
